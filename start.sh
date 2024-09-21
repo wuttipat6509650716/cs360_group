@@ -116,7 +116,7 @@ cd $path_api
 yarn
 
 #check .env file API 
-if [ ! -f "${path_api}/.env"]; then
+if [ ! -f "${path_api}/.env" ]; then
     echo "Create .env"
     touch  "${path_api}/.env"
 else
@@ -139,7 +139,7 @@ pm2 start yarn --name Strapi_Api -- start
 cd $path_client
 
 #check .env file NextJs
-if [ ! -f "${path_api}/.env"]; then
+if [ ! -f "${path_api}/.env" ]; then
     echo "Create .env"
     touch  "${path_client}/.env"
 else
