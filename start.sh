@@ -6,7 +6,15 @@ echo "$base_path"
 
 # อัปเดต package lists และติดตั้ง curl
 echo "อัปเดต package lists..."
-sudo yum check-update || sudo yum update -y
+if command -v apt &> /dev/null; then
+    echo "This system uses apt"
+    sudo apt update && sudo apt upgrade -y
+elif command -v yum &> /dev/null; then
+    echo "This system uses yum"
+    sudo yum check-update || sudo yum update -y
+else
+    echo "Unsupported package manager"
+fi
 
 if command -v curl &> /dev/null; then
     echo "curl is already installed."
