@@ -1,5 +1,6 @@
 
 
+
 # CS360 1/2567 Term Project: [FoodAdvisor]
 
 ## Group Information
@@ -71,6 +72,7 @@ The goal of this project is to study deployment processes and automate 10 tests.
 ### 1. Install NVM (Node Version Management) on the AWS Instance
 - Install nvm, then install node 16 by nvm :
 ```bash
+
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.4/install.sh | bash 
 		
 source ~/.bashrc
@@ -80,24 +82,30 @@ nvm install 16
 nvm use 16
 		
 node -v
+
 ```
 
 ### 2. Install yarn on the AWS Instance
 - Install yarn global by npm :
 ```bash
+
 npm install -g yarn
+
 ```
 
 ### 3. Install pm2 on the AWS Instance
 - Install pm2 by npm : 
 ```bash
+
 npm install -g pm2
+
 ```
 
 ### 4. Setup environment
 cd into `cd360_group` folder 
 *	Strapi **Backend** :
 ```bash
+
 # Create & Edit .env File (Backend)
 nano api/.env
 			
@@ -105,23 +113,33 @@ nano api/.env
 HOST=0.0.0.0 
 PORT=1337 
 STRAPI_ADMIN_CLIENT_URL=http://{public IPv4 of the EC2 instance}:3000 	
-			STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s
+STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s
+
+```
+```bash
+
+#Add JWT secret keys .env File (Backend)
+openssl rand -base64 16 >> api/.env
+
 ```
 
 
 * NextJs **FontEnd** :
 ```bash
+
 # Create & Edit .env File (FontEnd)
 nano client/.env
 			
 # Add The following into .env
 NEXT_PUBLIC_API_URL=http://{public IPv4 of the EC2 instance}:1337
 PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s##
+
 ```
 
 ### 5. Start Project
 - **Backend** 
 ```bash
+
 #cd into api folder (backend)
 cd api
 			
@@ -130,9 +148,11 @@ yarn & yarn seed
 
 # pm2 runtime
 pm2 start yarn --name Backend -- develop
+
 ```
 - **Fontend** 
 ```bash
+
 #cd into client folder (fontend)
 cd ../client
 			
@@ -141,6 +161,7 @@ yarn & yarn build
 
 # pm2 runtime
 pm2 start yarn --name Backend -- start
+
 ```
 > Use `pm2 list` for List Process
 > Use `pm2 stop <name>`for Stop Process
