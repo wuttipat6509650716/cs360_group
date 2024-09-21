@@ -39,40 +39,58 @@ install_nvm(){
 
 # NodeJs Check
 if command -v node &> /dev/null; then
-    echo "NodeJs Is Installed. Node : $(node -v) npm : $(npm -v)"
+    echo "NodeJs is already installed. Node: $(node -v), npm: $(npm -v)"
 else
-    echo "NodeJs is not installed."
-    echo "Installing NodeJs..."
+    echo "NodeJs is not installed. Installing NodeJs..."
     install_nvm
+    if command -v node &> /dev/null; then
+        echo "NodeJs installed successfully. Node: $(node -v)"
+    else
+        echo "NodeJs installation failed. Exiting."
+        exit 1
+    fi
 fi
 
 # Git Check
 if command -v git &> /dev/null; then
-    echo "Git Is Installed. Git : $(git -v)"
+    echo "Git is already installed. Git: $(git --version)"
 else
-    echo "Git is not installed."
-    echo "Installing Git..."
+    echo "Git is not installed. Installing Git..."
     install_git
+    if command -v git &> /dev/null; then
+        echo "Git installed successfully. Git: $(git --version)"
+    else
+        echo "Git installation failed. Exiting."
+        exit 1
+    fi
 fi
 
 # pm2 Check
 if command -v pm2 &> /dev/null; then
-    echo "pm2 Is Installed"
+    echo "pm2 is already installed."
 else
-    echo "Pm2 is Not Installed."
-    echo "Installing pm2..."
+    echo "pm2 is not installed. Installing pm2..."
     npm install -g pm2
-    echo "pm2 installed successfully."
+    if command -v pm2 &> /dev/null; then
+        echo "pm2 installed successfully."
+    else
+        echo "pm2 installation failed. Exiting."
+        exit 1
+    fi
 fi
 
 # yarn Check
 if command -v yarn &> /dev/null; then
-    echo "yarn Is Installed"
+    echo "yarn is already installed."
 else
-    echo "yarn is Not Installed."
-    echo "Installing yarn..."
+    echo "yarn is not installed. Installing yarn..."
     npm install -g yarn
-    echo "yarn installed successfully."
+    if command -v yarn &> /dev/null; then
+        echo "yarn installed successfully."
+    else
+        echo "yarn installation failed. Exiting."
+        exit 1
+    fi
 fi
 
 source ~/.bashrc
