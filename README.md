@@ -1,4 +1,5 @@
 
+
 # CS360 1/2567 Term Project: [FoodAdvisor]
 
 ## Group Information
@@ -103,17 +104,18 @@ nano api/.env
 # Add The following into .env
 HOST=0.0.0.0 
 PORT=1337 
-STRAPI_ADMIN_CLIENT_URL=http://localhost:3000 	
+STRAPI_ADMIN_CLIENT_URL=http://{public IPv4 of the EC2 instance}:3000 	
 			STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s
 ```
 
-NextJs **FontEnd** :
+
+* NextJs **FontEnd** :
 ```bash
 # Create & Edit .env File (FontEnd)
 nano client/.env
 			
 # Add The following into .env
-NEXT_PUBLIC_API_URL=http://127.0.0.1:1337
+NEXT_PUBLIC_API_URL=http://{public IPv4 of the EC2 instance}:1337
 PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s##
 ```
 
@@ -234,6 +236,6 @@ chmod +x start.sh
 
 ```
 
-
-
 [ภาพ screen capture ของหนาเว็บแอปพลิเคชันซึ่ง deploy ไวบน EC2]
+![Screen capture](https://media.discordapp.net/attachments/996073868768850002/1286932089958174760/image.png?ex=66efb468&is=66ee62e8&hm=69cac61d75e5500624b226f38e6c00a60a03f7e96880f09f24769c927eca3b7e&=&format=webp&quality=lossless&width=1514&height=946)
+
