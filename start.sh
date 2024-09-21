@@ -23,6 +23,8 @@ else
     sudo yum install -y curl
 fi
 
+publicIPv4=$(curl ipinfo.io/ip)
+
 install_git(){
     sudo yum install git
 }
@@ -81,7 +83,7 @@ path_client=$base_path/client/
 cd $path_api
 yarn
 
-echo -e "HOST=0.0.0.0\nPORT=1337\nSTRAPI_ADMIN_CLIENT_URL=http://localhost:3000\nSTRAPI_ADMIN_CLIENT_PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" > .env
+echo -e "HOST=0.0.0.0\nPORT=1337\nSTRAPI_ADMIN_CLIENT_URL=http://${publicIPv4}:3000\nSTRAPI_ADMIN_CLIENT_PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" > .env
 cat .env > logs.txt
 yarn seed
 
@@ -92,7 +94,7 @@ pm2 start yarn --name Strapi_Api -- start
 cd $path_client
 
 yarn
-echo -e "NEXT_PUBLIC_API_URL=http://localhost:1337\nPREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" > .env
+echo -e "NEXT_PUBLIC_API_URL=http://${publicIPv4}:1337\nPREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" > .env
 
 echo "Build NextJS..."
 yarn build
