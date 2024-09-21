@@ -37,6 +37,18 @@ install_nvm(){
     nvm use 16
 }
 
+check_and_add_to_env() {
+    VAR_NAME=$1
+    VAR_VALUE=$2
+    ENV_PATH=$3
+    if ! grep -q "^$VAR_NAME=" "$ENV_PATH"; then
+        echo "$VAR_NAME=$VAR_VALUE" >> "$ENV_PATH"
+        echo "$VAR_NAME added to $ENV_PATH"
+    else
+        echo "$VAR_NAME is already set, skipping..."
+    fi
+}
+
 # NodeJs Check
 if command -v node &> /dev/null; then
     echo "NodeJs is already installed. Node: $(node -v), npm: $(npm -v)"
@@ -95,24 +107,51 @@ fi
 
 source ~/.bashrc
 
-path_api=$base_path/api/
-path_client=$base_path/client/
+path_api=$base_path/api
+path_client=$base_path/client
 
 cd $path_api
+
+#load Libs
 yarn
 
-echo -e "HOST=0.0.0.0\nPORT=1337\nSTRAPI_ADMIN_CLIENT_URL=http://${publicIPv4}:3000\nSTRAPI_ADMIN_CLIENT_PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" > .env
-cat .env > logs.txt
-yarn seed
+#check .env file API 
+if [ ! -f "${path_api}/.env"]; then
+    echo "Create .env"
+    touch  "${path_api}/.env"
+else
+    echo ".env file alredy exists."
+fi
 
+# Set .env API
+check_and_add_to_env "HOST" "0.0.0.0" "${path_api}/.env"
+check_and_add_to_env "PORT" "1337" ".env"
+check_and_add_to_env "STRAPI_ADMIN_CLIENT_URL" "http://${publicIPv4}:3000" "${path_api}/.env"
+check_and_add_to_env "STRAPI_ADMIN_CLIENT_PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" "${path_api}/.env"
+check_and_add_to_env "JWT_SECRET" "$(openssl rand -base64 16)" "${path_api}/.env"
+check_and_add_to_env "NODE_ENV" "production" "${path_api}/.env"
+
+yarn seed
 
 echo "Starting Strapi..."
 pm2 start yarn --name Strapi_Api -- start
 
 cd $path_client
 
+#check .env file NextJs
+if [ ! -f "${path_api}/.env"]; then
+    echo "Create .env"
+    touch  "${path_client}/.env"
+else
+    echo ".env file alredy exists."
+fi
+
+#load Libs
 yarn
-echo -e "NEXT_PUBLIC_API_URL=http://${publicIPv4}:1337\nPREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" > .env
+
+# Set .env NextJS
+check_and_add_to_env "NEXT_PUBLIC_API_URL" "http://${publicIPv4}:1337" ".env"
+check_and_add_to_env "PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" ".env"
 
 echo "Build NextJS..."
 yarn build
