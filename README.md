@@ -1,6 +1,3 @@
-
-
-
 # CS360 1/2567 Term Project: [FoodAdvisor]
 
 ## Group Information
@@ -40,15 +37,20 @@ The goal of this project is to study deployment processes and automate 10 tests.
 - **Hosting/Deployment:** AWS EC2  
 - **Database:** SQLite
 
-## Setup AWS EC2 Instance
+### Require 
+- Node >=14.x.x <=18.x.x
+- npm >=6.0.0
+- yarn 1.22.22
+- git
+- pm2 v.5.4.2
 
-  
+## Setup AWS EC2 Instance
 
 1.  **Launch `AWS EC2` Instance**:
 
     -  **Instance Type**: t2.medium
 
-    -  **Operating System**: Ubuntu 24.04
+    -  **Operating System**: Amazon Linux
 
   
 
@@ -68,8 +70,10 @@ The goal of this project is to study deployment processes and automate 10 tests.
 ## How to deploy and run the project manually
 
 ## Step-by-Step Guide
+- Use `sudo yum check-update || sudo yum update -y` For Update (use other, If you use other OS)
 
-### 1. Install NVM (Node Version Management) on the AWS Instance
+
+### 1. Install NVM (Node Version Management) on the AWS Instance ( Use other If you want )
 - Install nvm, then install node 16 by nvm :
 ```bash
 
@@ -102,38 +106,40 @@ npm install -g pm2
 ```
 
 ### 4. Setup environment
-cd into `cd360_group` folder 
-*	Strapi **Backend** :
-```bash
 
+cd into `cs360_group` folder. `cd cs360_group`
+
+* Strapi **Backend** :
+
+	- use `curl ipinfo.io/ip` for get **PublicIPv4**
+	- use `openssl rand -base64  32` For **STRAPI_ADMIN_CLIENT_PREVIEW_SECRET**
+	- use `openssl rand -base64 16` For **JWT_SECRET**
+```bash
 # Create & Edit .env File (Backend)
-nano api/.env
-			
-# Add The following into .env
-HOST=0.0.0.0 
-PORT=1337 
-STRAPI_ADMIN_CLIENT_URL=http://{public IPv4 of the EC2 instance}:3000 	
-STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s
-
+nano  api/.env
 ```
 ```bash
+# Copy The following into .env
 
-#Add JWT secret keys .env File (Backend)
-openssl rand -base64 16 >> api/.env
-
+NODE_ENV=production
+HOST=0.0.0.0
+PORT=1337
+STRAPI_ADMIN_CLIENT_URL=http://<public IPv4 of the EC2 instance>:3000
+STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=<your srcret>
+JWT_SECRET=<your secret>
+# Ctrl+o > Enter > Ctrl+x. For Save File.
 ```
-
 
 * NextJs **FontEnd** :
+	- use `openssl rand -base64 32` For **PREVIEW_SECRET**
 ```bash
-
 # Create & Edit .env File (FontEnd)
-nano client/.env
-			
-# Add The following into .env
-NEXT_PUBLIC_API_URL=http://{public IPv4 of the EC2 instance}:1337
-PREVIEW_SECRET=ARNFCb9zrC9ZHm5hZzCigWivD40icS4s##
-
+nano  client/.env
+```
+```bash
+# Copy The following into .env
+NEXT_PUBLIC_API_URL=http://<public  IPv4  of  the  EC2  instance>:1337
+PREVIEW_SECRET=<your  Secret>
 ```
 
 ### 5. Start Project
@@ -147,7 +153,7 @@ cd api
 yarn & yarn seed
 
 # pm2 runtime
-pm2 start yarn --name Backend -- develop
+pm2 start yarn --name Backend -- start
 
 ```
 - **Fontend** 
@@ -160,7 +166,7 @@ cd ../client
 yarn & yarn build
 
 # pm2 runtime
-pm2 start yarn --name Backend -- start
+pm2 start yarn --name Fontend -- start
 
 ```
 > Use `pm2 list` for List Process
