@@ -82,7 +82,7 @@ if command -v pm2 &> /dev/null; then
     echo "pm2 is already installed."
 else
     echo "pm2 is not installed. Installing pm2..."
-    npm install -g pm2
+    npm install -g pm2@5.4.2
     if command -v pm2 &> /dev/null; then
         echo "pm2 installed successfully."
     else
@@ -96,7 +96,7 @@ if command -v yarn &> /dev/null; then
     echo "yarn is already installed."
 else
     echo "yarn is not installed. Installing yarn..."
-    npm install -g yarn
+    npm install -g yarn@1.22.22
     if command -v yarn &> /dev/null; then
         echo "yarn installed successfully."
     else
