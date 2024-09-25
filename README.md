@@ -34,11 +34,11 @@ The goal of this project is to study deployment processes and automate 10 tests.
 - **Database:** SQLite
 
 ### Software Require 
-- Node >=14.x.x <=18.x.x
+- Node 16
 - npm >=6.0.0
 - yarn 1.22.22
-- git
 - pm2 v.5.4.2
+- git
 
 ## Setup AWS EC2 Instance
 
