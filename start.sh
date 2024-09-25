@@ -159,3 +159,6 @@ echo "Starting Client..."
 pm2 start yarn --name client -- start
 
 echo "Deploy Success"
+
+echo "You Can Access Web-Application at http://${publicIPv4}:3000"
+echo "You Can Access Strapi-Backend at http://${publicIPv4}:1337"
