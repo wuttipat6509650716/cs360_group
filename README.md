@@ -9,17 +9,13 @@
 
 ## Members
 
-| Name | Student ID | |------------------------------- ---|-----------------|
-
-Natthida Sae-tang 6509650070
-
-Teerawat Nakornchai 6509650476
-
-Napat Thaibankuai 6509650492
-
-Punnatut Maneewong 6509650542
-
-Wuttipat Pipopsukawadee 6509650716
+| Name | Student ID |
+|--|--|
+|Natthida Sae-tang |6509650070|
+|Teerawat Nakornchai |6509650476|
+|Napat Thaibankuai |6509650492|
+|Punnatut Maneewong |6509650542|
+|Wuttipat Pipopsukawadee |6509650716|
 
 ## Project Goal
 
@@ -37,7 +33,7 @@ The goal of this project is to study deployment processes and automate 10 tests.
 - **Hosting/Deployment:** AWS EC2  
 - **Database:** SQLite
 
-### Require 
+### Software Require 
 - Node >=14.x.x <=18.x.x
 - npm >=6.0.0
 - yarn 1.22.22
