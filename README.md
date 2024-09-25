@@ -67,6 +67,7 @@ The goal of this project is to study deployment processes and automate 10 tests.
 
 ## Step-by-Step Guide
 - Use `sudo yum check-update || sudo yum update -y` For Update (use other, If you use other OS)
+- Use `sudo yum install git` If Your System Not have git
 
 
 ### 1. Install NVM (Node Version Management) on the AWS Instance ( Use other If you want )
