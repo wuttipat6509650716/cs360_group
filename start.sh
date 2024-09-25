@@ -4,7 +4,7 @@
 base_path=$(pwd)
 echo "$base_path"
 
-# อัปเดต package lists และติดตั้ง curl
+# Update package lists And install curl
 echo "อัปเดต package lists..."
 if command -v apt &> /dev/null; then
     echo "This system uses apt"
@@ -51,7 +51,18 @@ check_and_add_to_env() {
 
 # NodeJs Check
 if command -v node &> /dev/null; then
-    echo "NodeJs is already installed. Node: $(node -v), npm: $(npm -v)"
+    NODE_VERSION=$(node -v)
+    NPM_VERSION=$(npm -v)
+    echo "NodeJs is already installed. Node: ${NODE_VERSION}, npm: ${NPM_VERSION}"
+
+    # Check NodeJs Version is equal to 16
+    if [[ $(node -v | sed ''s/v//) =~ ^(1[6])\. ]]; then
+        echo "Node.js version: $NODE_VERSION is within the allowed range."
+    else
+        echo "Node.js version: $NODE_VERSION is not v.16"
+        exit 1
+    fi
+
 else
     echo "NodeJs is not installed. Installing NodeJs..."
     install_nvm
@@ -82,7 +93,7 @@ if command -v pm2 &> /dev/null; then
     echo "pm2 is already installed."
 else
     echo "pm2 is not installed. Installing pm2..."
-    npm install -g pm2
+    npm install -g pm2@5.4.2
     if command -v pm2 &> /dev/null; then
         echo "pm2 installed successfully."
     else
@@ -96,7 +107,7 @@ if command -v yarn &> /dev/null; then
     echo "yarn is already installed."
 else
     echo "yarn is not installed. Installing yarn..."
-    npm install -g yarn
+    npm install -g yarn@1.22.22
     if command -v yarn &> /dev/null; then
         echo "yarn installed successfully."
     else
@@ -159,3 +170,6 @@ echo "Starting Client..."
 pm2 start yarn --name client -- start
 
 echo "Deploy Success"
+
+echo "You Can Access Web-Application at http://${publicIPv4}:3000"
+echo "You Can Access Strapi-Backend at http://${publicIPv4}:1337"
