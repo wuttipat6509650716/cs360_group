@@ -90,7 +90,7 @@ node -v
 - Install yarn global by npm :
 ```bash
 
-npm install -g yarn
+npm install -g yarn@1.22.22
 
 ```
 
@@ -98,7 +98,7 @@ npm install -g yarn
 - Install pm2 by npm : 
 ```bash
 
-npm install -g pm2
+npm install -g pm2@5.4.2
 
 ```
 
