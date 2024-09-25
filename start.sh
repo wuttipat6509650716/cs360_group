@@ -4,7 +4,7 @@
 base_path=$(pwd)
 echo "$base_path"
 
-# อัปเดต package lists และติดตั้ง curl
+# Update package lists And install curl
 echo "อัปเดต package lists..."
 if command -v apt &> /dev/null; then
     echo "This system uses apt"
@@ -51,7 +51,18 @@ check_and_add_to_env() {
 
 # NodeJs Check
 if command -v node &> /dev/null; then
-    echo "NodeJs is already installed. Node: $(node -v), npm: $(npm -v)"
+    NODE_VERSION=$(node -v)
+    NPM_VERSION=$(npm -v)
+    echo "NodeJs is already installed. Node: ${NODE_VERSION}, npm: ${NPM_VERSION}"
+
+    # Check NodeJs Version is equal to 16
+    if [[ $(node -v | sed ''s/v//) =~ ^(1[6])\. ]]; then
+        echo "Node.js version: $NODE_VERSION is within the allowed range."
+    else
+        echo "Node.js version: $NODE_VERSION is not v.16"
+        exit 1
+    fi
+
 else
     echo "NodeJs is not installed. Installing NodeJs..."
     install_nvm
