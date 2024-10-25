@@ -263,3 +263,21 @@ chmod +x start.sh
 [ภาพ screen capture ของหนาเว็บแอปพลิเคชันซึ่ง deploy ไวบน EC2]
 ![Screen capture](https://media.discordapp.net/attachments/996073868768850002/1286932089958174760/image.png?ex=66efb468&is=66ee62e8&hm=69cac61d75e5500624b226f38e6c00a60a03f7e96880f09f24769c927eca3b7e&=&format=webp&quality=lossless&width=1514&height=946)
 
+## Unit and Integration Testing Overview
+...
+## Setting Up Tests
+...
+## Running Tests
+...
+## Test File Structure
+...
+## Test Coverage
+The tests in this repository cover the following functionality:
+
+-
+-
+-
+## Viewing Test Results
+...
+## Adding New Tests
+...
