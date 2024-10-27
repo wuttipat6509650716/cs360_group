@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useState } from 'react';
+import { getStrapiURL } from '../../utils';
 
 const Register = ({ Register }) => {
   const [username, setUsername] = useState('');
@@ -37,7 +38,7 @@ const Register = ({ Register }) => {
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:1337/api/auth/local/register", {
+      const response = await fetch(getStrapiURL("/auth/local/register"), {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
