@@ -1,6 +1,62 @@
 import Link from 'next/link';
+import { useEffect,useState } from 'react';
+import { getStrapiURL } from '../../utils';
+
 
 const Profile = ({ profile }) => {
+  const [firstname,setfirstname] = useState("")
+  const [lastname,setlastname] = useState("")
+  const [nickname,setnickname] = useState("")
+  const [gender,setgender] = useState("")
+  const [birthday,setbirthday] = useState("")
+  const [age,setage] = useState("")
+  const [address,setaddress] = useState("")
+  const [phone,setphone] = useState("")
+
+  useEffect(()=>{
+
+    const fetchData = async ()=>{
+      const myHeaders = new Headers();
+      myHeaders.append("Authorization", `Bearer ${localStorage.getItem('jwt')}`);
+
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow"
+      };
+
+      try {
+        const response = await fetch(getStrapiURL('/users/me')+'?populate=*',requestOptions);
+        if(response.status == 200){
+          const result = await response.json();
+          const profile = result.profile
+          setfirstname(profile.firstname)
+          setlastname(profile.lastname)
+          setnickname(profile.nickname)
+          setgender(profile.gender)
+          setbirthday(profile.birthday)
+          setaddress(profile.address)
+          setage(profile.age)
+          setphone(profile.phone)
+
+          console.log(result);
+        }else if(response.status == 401){
+          const result = await response.json();
+          alert(result.error.message)
+          console.log(result);
+          
+        }
+
+
+      } catch (error) {
+        alert("Fail View Profile")
+        console.log(error.message);
+      }
+    }
+
+    fetchData()
+  },[])
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-500 to-orange-900 p-16 flex justify-center items-center">
       <div className="bg-white w-full max-w-6xl p-10 rounded-lg shadow-lg relative">
@@ -21,8 +77,8 @@ const Profile = ({ profile }) => {
             className="w-24 h-24 rounded-full object-cover mr-4"
           />
           <div>
-            <h2 className="text-3xl font-bold">Full Name</h2>
-            <p className="text-gray-600">Phone number</p>
+            <h2 className="text-3xl font-bold">{`${firstname} ${lastname}`}</h2>
+            <p className="text-gray-600">{phone}</p>
           </div>
         </div>
 
@@ -33,6 +89,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Your First Name"
+              value={firstname}
               disabled
             />
           </div>
@@ -42,6 +99,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Your Last Name"
+              value={lastname}
               disabled
             />
           </div>
@@ -52,6 +110,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Your Nick Name"
+              value={nickname}
               disabled
             />
           </div>
@@ -61,6 +120,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Gender"
+              value={gender}
               disabled
             />
           </div>
@@ -71,6 +131,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Birthday"
+              value={birthday}
               disabled
             />
           </div>
@@ -80,6 +141,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Age"
+              value={age}
               disabled
             />
           </div>
@@ -90,6 +152,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Address"
+              value={address}
               disabled
             />
           </div>
@@ -99,6 +162,7 @@ const Profile = ({ profile }) => {
               type="text"
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Phone number"
+              value={phone}
               disabled
             />
           </div>
