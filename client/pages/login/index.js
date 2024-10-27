@@ -1,8 +1,49 @@
 import Link from 'next/link';
+import { useState } from 'react';
+import { getStrapiURL } from '../../utils';
+import { useRouter } from 'next/router';
+
+
+
 
 const Login = ({ login }) => {
   const [username,setUsername] = useState('');  
   const [password,setPassword] = useState('');
+  const router  = useRouter();
+  const sub_login = async ()=>{
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const raw = JSON.stringify({
+      "identifier": username,
+      "password": password
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow"
+    };
+
+    try {
+      const response = await fetch(getStrapiURL('/auth/local'), requestOptions);
+      if(response.status != 200)
+      {
+        throw new Error("Bad Request");
+      }
+
+      const result = await response.json();
+      localStorage.setItem('jwt', result.jwt);
+      alert("Login Success!");
+      router.push('/');
+
+    } catch (error) {
+      alert("Login Fail! "+error.message);
+      console.log(error);
+    }
+  }
+
  
   return (
     <div class="flex justify-center items-center min-h-screen bg-gray-100">
@@ -21,8 +62,7 @@ const Login = ({ login }) => {
             
             onClick={(event)=>{
                 event.preventDefault()
-                console.log(username);
-                console.log(password);
+                sub_login()
                  
               }}
 
