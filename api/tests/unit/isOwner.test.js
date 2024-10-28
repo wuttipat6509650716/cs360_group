@@ -53,4 +53,19 @@ describe('Custom Middleware Unit Test',()=>{
         expect(next).not.toHaveBeenCalled();
       });
 
+      //TC6
+      it('should verify isOwner middleware for authorized user', async () => {
+        ctx.state.user.id = 1
+        mockStrapi.entityService.findOne = jest.fn().mockResolvedValue({
+          id: 1,
+          user: { id: 1 },
+        })
+
+        const middleware = isOwner({}, { strapi: mockStrapi });
+
+        await middleware(ctx, next);
+
+        expect(next).toHaveBeenCalled();
+      });
+
 })
