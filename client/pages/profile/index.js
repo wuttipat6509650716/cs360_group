@@ -4,6 +4,7 @@ import { getStrapiURL } from '../../utils';
 
 
 const Profile = ({ profile }) => {
+  const [profildId,setprofildId] = useState(null)
   const [firstname,setfirstname] = useState("")
   const [lastname,setlastname] = useState("")
   const [nickname,setnickname] = useState("")
@@ -12,6 +13,8 @@ const Profile = ({ profile }) => {
   const [age,setage] = useState("")
   const [address,setaddress] = useState("")
   const [phone,setphone] = useState("")
+
+  const [editState,seteditState] = useState(false);
 
   useEffect(()=>{
 
@@ -30,6 +33,7 @@ const Profile = ({ profile }) => {
         if(response.status == 200){
           const result = await response.json();
           const profile = result.profile
+          setprofildId(profile.id)
           setfirstname(profile.firstname)
           setlastname(profile.lastname)
           setnickname(profile.nickname)
@@ -90,7 +94,7 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Your First Name"
               value={firstname}
-              disabled
+              disabled={!editState}
             />
           </div>
           <div>
@@ -100,7 +104,7 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Your Last Name"
               value={lastname}
-              disabled
+              disabled={!editState}
             />
           </div>
 
@@ -111,7 +115,7 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Your Nick Name"
               value={nickname}
-              disabled
+              disabled={!editState}
             />
           </div>
           <div>
@@ -121,7 +125,7 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Gender"
               value={gender}
-              disabled
+              disabled={!editState}
             />
           </div>
 
@@ -132,7 +136,7 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Birthday"
               value={birthday}
-              disabled
+              disabled={!editState}
             />
           </div>
           <div>
@@ -142,7 +146,7 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Age"
               value={age}
-              disabled
+              disabled={!editState}
             />
           </div>
 
@@ -153,7 +157,7 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Address"
               value={address}
-              disabled
+              disabled={!editState}
             />
           </div>
           <div>
@@ -163,13 +167,30 @@ const Profile = ({ profile }) => {
               className="block w-full rounded-lg border border-gray-300 bg-gray-100 p-3 shadow-md focus:border-indigo-500 focus:ring-indigo-500 text-lg transition duration-300 ease-in-out transform hover:scale-105"
               placeholder="Phone number"
               value={phone}
-              disabled
+              disabled={!editState}
             />
           </div>
         </div>
 
         <div className="mt-8 flex justify-end space-x-4">
-          <button className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg">
+          <p 
+            className="py-3"
+            hidden={!editState}
+          >✎</p>
+          <button className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-lg" 
+          hidden={!editState}
+          onClick={(event)=>{
+            seteditState(false)
+          }}
+          >
+            Submit
+          </button>
+          <button className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-lg" 
+            hidden={editState}
+            onClick={(event)=>{
+              seteditState(true)
+            }}
+            >
             Edit
           </button>
           <button className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-lg">
