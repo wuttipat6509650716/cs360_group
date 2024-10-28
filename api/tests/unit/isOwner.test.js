@@ -41,4 +41,16 @@ describe('Custom Middleware Unit Test',()=>{
         expect(next).not.toHaveBeenCalled();
       });
 
+       //TC4
+       it('should verify isOwner middleware for non-existent profile', async () => {
+        mockStrapi.entityService.findOne = jest.fn().mockResolvedValue(null)
+
+        const middleware = isOwner({}, { strapi: mockStrapi });
+
+        await middleware(ctx, next);
+
+        expect(ctx.notFound).toHaveBeenCalledWith("Profile not found.");
+        expect(next).not.toHaveBeenCalled();
+      });
+
 })
