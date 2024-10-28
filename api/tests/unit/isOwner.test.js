@@ -30,4 +30,15 @@ describe('Custom Middleware Unit Test',()=>{
         };
       });
       
+      //TC 1 
+      it('should return unauthorized if user is not authenticated', async () => {
+        ctx.state.user = null
+        const middleware = isOwner({}, { strapi: mockStrapi });
+
+        await middleware(ctx, next);
+
+        expect(ctx.unauthorized).toHaveBeenCalledWith("User authentication is required.");
+        expect(next).not.toHaveBeenCalled();
+      });
+
 })
