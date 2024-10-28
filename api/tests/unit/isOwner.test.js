@@ -30,17 +30,39 @@ describe('Custom Middleware Unit Test',()=>{
         };
       });
       
-      //TC 1 
-      it('should return unauthorized if user is not authenticated', async () => {
-        ctx.state.user = null
+    //TC 1 
+    it('should return unauthorized if user is not authenticated', async () => {
+    ctx.state.user = null
+    const middleware = isOwner({}, { strapi: mockStrapi });
+
+    await middleware(ctx, next);
+
+    expect(ctx.unauthorized).toHaveBeenCalledWith("User authentication is required.");
+    expect(next).not.toHaveBeenCalled();
+    });
+
+    //TC2
+    it('should return bad request if ID is missing', async () => {
+        ctx.params.id = undefined
         const middleware = isOwner({}, { strapi: mockStrapi });
 
         await middleware(ctx, next);
 
-        expect(ctx.unauthorized).toHaveBeenCalledWith("User authentication is required.");
+        expect(ctx.badRequest).toHaveBeenCalledWith("Profild ID is required.");
         expect(next).not.toHaveBeenCalled();
-      });
+    });
 
+    //TC3
+    it('should verify isOwner middleware for invalid ID', async () => {
+        ctx.params.id = 'abc'
+        const middleware = isOwner({}, { strapi: mockStrapi });
+
+        await middleware(ctx, next);
+
+        expect(ctx.badRequest).toHaveBeenCalledWith("ID must be digit only");
+        expect(next).not.toHaveBeenCalled();
+    });
+    
        //TC4
        it('should verify isOwner middleware for non-existent profile', async () => {
         mockStrapi.entityService.findOne = jest.fn().mockResolvedValue(null)
