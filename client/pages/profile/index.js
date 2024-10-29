@@ -44,12 +44,17 @@ const Profile = ({ profile }) => {
     };
 
     try {
-      const response = await fetch(getStrapiURL(`/api/profiles/${profildId}`), requestOptions);
-      console.log();
+      const response = await fetch(getStrapiURL(`/profiles/${profildId}`), requestOptions);
+      const resualt = await response.json()
       if (response.status == 200) {
+        console.log(resualt.data);
         alert("Profile Update Success")
-      } else {
-        console.log(response.body);
+      } else if (response.status == 400) {
+        const err = await resualt.error.details.errors
+        for (let index = 0; index < err.length; index++) {
+          alert(err[index].message)
+          
+        }
       }
     } catch (error) {
       console.error(error);
@@ -246,6 +251,7 @@ const Profile = ({ profile }) => {
             hidden={!editState}
             onClick={(event) => {
               seteditState(false)
+              updateProfile()
             }}
           >
             Submit
