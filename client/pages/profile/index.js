@@ -264,7 +264,7 @@ const Profile = ({ profile }) => {
           >
             Edit
           </button>
-          <button className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-lg">
+          <button className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-lg" hidden='true'>
             Delete
           </button>
         </div>
