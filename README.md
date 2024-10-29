@@ -264,13 +264,41 @@ chmod +x start.sh
 ![Screen capture](https://media.discordapp.net/attachments/996073868768850002/1286932089958174760/image.png?ex=66efb468&is=66ee62e8&hm=69cac61d75e5500624b226f38e6c00a60a03f7e96880f09f24769c927eca3b7e&=&format=webp&quality=lossless&width=1514&height=946)
 
 ## Unit and Integration Testing Overview
-...
+In this project, we use several essential tools for both Unit and Integration Testing:
+
+- **Jest**: The primary testing framework for Unit Tests, ensuring that individual functions and modules work as expected. Jest provides convenient management for assertions, mocking, and asynchronous operations.
+- **Supertest**: A tool used to test HTTP endpoints in Integration Tests, simulating HTTP requests sent to the API and checking responses such as status codes and response content.
+- **Strapi Testing Utils**: A utility set for simulating Strapi’s operations during testing, used to set up and tear down the Strapi instance before and after tests, enabling API and middleware testing that mirrors real-environment functionality.
+
+
 ## Setting Up Tests
-...
+
 ## Running Tests
 ...
 ## Test File Structure
-...
+```bash
+cs360_group/
+└── api/
+    ├── src/
+    │   └── api/
+    │       └── profile/
+    │           └── middlewares/
+    │               └── isOwner.js                # Middleware file for checking ownership
+    └── tests/
+        ├── unit/
+        │   └── isOwner.test.js                  # Unit test for the isOwner middleware
+        └── integration/
+            └── profile/
+                └── index.js                     # Integration tests for profile-related features
+            └── integration.test.js              # General integration tests
+
+```
+In this structure:
+
+- The `isOwner.js` file in src/api/profile/middlewares/ is the middleware being tested.
+- The `isOwner.test.js` file in unit/ is for unit testing of the isOwner middleware.
+- The `index.js` file in integration/profile/ is for integration testing of functions within the profile.
+- The `integration.test.js` file is for general integration testing of the API.
 ## Test Coverage
 The tests in this repository cover the following functionality:
 
