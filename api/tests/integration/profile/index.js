@@ -156,5 +156,27 @@ describe('Profile Integration Test',()=>{
         expect(res.status).toBe(401);
         expect(res.body.error.message).toBe('This action is unauthorized.');
     });
+     //TC6
+     it("should delete user profile if Owner",async ()=>{
+        const res = await request(strapi.server.httpServer)
+            .delete('/api/profiles/'+profile2.id)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${user1_jwt}`)
+        
+        expect(res.status).toBe(401);
+        expect(res.body.error.message).toBe('This action is unauthorized.');
+    });
+
+    //TC5
+    it("should delete user profile if Owner",async ()=>{
+        const res = await request(strapi.server.httpServer)
+            .delete('/api/profiles/'+profile1.id)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${user1_jwt}`)
+        
+        expect(res.status).toBe(200);
+        expect(res.body).toHaveProperty('data');
+
+    });
 
 })
