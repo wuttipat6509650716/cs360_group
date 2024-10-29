@@ -125,4 +125,36 @@ describe('Profile Integration Test',()=>{
 
     });
 
+    //TC3
+    it("should update user profile if Owner",async ()=>{
+        
+        const res = await request(strapi.server.httpServer)
+            .put('/api/profiles/'+profile1.id)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${user1_jwt}`)
+            .send({
+                data:{
+                    age:1000
+                }
+            })
+        expect(res.status).toBe(200);
+        expect(res.body.data.attributes).toHaveProperty('age',1000);
+    });
+
+    //TC4
+    it("should not update user profile if not Owner",async ()=>{
+        const res = await request(strapi.server.httpServer)
+            .put('/api/profiles/'+profile1.id)
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${user2_jwt}`)
+            .send({
+                data:{
+                    age:1000
+                }
+            })
+        
+        expect(res.status).toBe(401);
+        expect(res.body.error.message).toBe('This action is unauthorized.');
+    });
+
 })
