@@ -281,3 +281,6 @@ The tests in this repository cover the following functionality:
 ...
 ## Adding New Tests
 ...
+
+
+## CI pipeline
