@@ -272,9 +272,52 @@ In this project, we use several essential tools for both Unit and Integration Te
 
 
 ## Setting Up Tests
+- Install test tools
+    ```bash
+        yarn add --dev jest supertest
+    ```
+- in file `package.json` add **test** command to scripts section
 
+    ```bash
+        # add test command to scripts section
+        "scripts": {
+            "develop": "strapi develop",
+            "start": "strapi start",
+            "build": "strapi build",
+            "strapi": "strapi",
+            "test":"jest --runInBand --coverage=true"
+        },
+    ```
+    and add those lines at the bottom of file
+    ```bash
+        "jest": {
+            "collectCoverageFrom": [
+                "src/api/**/*.js"
+                ],
+            "coverageReporters": [
+                "clover",
+                "json",
+                "text"
+                ],
+            "testPathIgnorePatterns": [
+                "/node_modules/",
+                ".tmp",
+                ".cache"
+                ],
+            "modulePathIgnorePatterns": [
+                "./build"
+                ],
+            "testEnvironment": "node"
+        }
+    ```
+    
 ## Running Tests
-...
+- use this command
+
+    ```bash
+    yarn test #use for test
+    ```
+
 ## Test File Structure
 ```bash
 cs360_group/
@@ -302,13 +345,36 @@ In this structure:
 ## Test Coverage
 The tests in this repository cover the following functionality:
 
--
--
--
+- **Unit test**
+    - Test custom **isOwner** middleware to verify user permissions.
+
+- **Integration**
+
+    CRUD operations for user profiles, including:
+    - **Create**: Ensure profile creation is successful with valid data.
+    - **Read**: Retrieve profile data for authenticated users.
+    - **Update**: Test profile updates, ensuring only owners can modify.
+    - **Delete**: Confirm only authorized users can delete their profiles.
+
 ## Viewing Test Results
 ...
 ## Adding New Tests
-...
+- **Unit Test**
+    
+    - Add file `<name>.test.js` to unit test folder
+    - And implement Test inside file
+    
+- **Integration**
 
+    1. **Create a Directory for Each API**
+
+        Create a new folder named after the API you intend to test. For example, if you're testing the profile API, the folder structure would be:
+    2. **Create index.js Inside the API Folder** eg. authen/index.js
+        
+        In this file implement test for Api
+    3. **Modify `integration.test.js`**
+
+        Add `require('./name/index');` in under file
+    
 
 ## CI pipeline
