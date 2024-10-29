@@ -30,7 +30,7 @@ jobs:
 
     - name: Install Dependencies
       working-directory: ./api
-      run: yarn ci
+      run: yarn
 
     - name: Seed Data
       working-directory: ./api
