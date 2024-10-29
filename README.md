@@ -377,34 +377,66 @@ The tests in this repository cover the following functionality:
         Add `require('./name/index');` in under file
     
 
-## CI pipeline
+## GitHub Action CI pipeline
 
 ### Pipeline Overview
-This GitHub Actions pipeline, named **Node.js CI**, is triggered on any push or pull request to the `master` and `develop` branches, designed to automate the testing process across different operating systems (Ubuntu and Windows) and Node.js versions.
+This GitHub Actions pipeline, named **Api CI**, is triggered on any push or pull request to All branches, designed to automate the testing process across different operating systems (Ubuntu ,ubuntu, redhat) and Node.js versions.
 
 ### Workflow Structure
 
+YAML FILE : `api/github/workflows/Automate-Test.yml`
+
 1. **Trigger Conditions**:
-   - The pipeline runs on pushes and pull requests to the `master` and `develop` branches.
+   - The pipeline runs on pushes and pull requests to All branches.
 
 2. **Job Configuration**:
    - The workflow defines a single job called **test** that runs across multiple environments by using a **matrix strategy** to run the test concurrently on:
-     - **Operating Systems**: `ubuntu-latest` and `windows-latest`
-     - **Node.js Versions**: Latest stable Node.js and version 16.x
+     - **Operating Systems**: `ubuntu`, `debian` and `redhat`
+     - **Node.js Versions**: Node version 16.x
 
 3. **Job Steps**:
-   - **Checkout Code**: 
-     - Uses the `actions/checkout@v4` action to clone the repository code into the workflow environment.
-   
-   - **Set up Node.js**:
-     - Configures the Node.js environment according to the specified version from the matrix (`node` or `16.x`), using the `actions/setup-node@v4` action.
-   
-   - **Install Yarn**:
-     - Installs Yarn globally using `npm install -g yarn`.
+    - **Checkout Code**: 
+        - Uses the `actions/checkout@v4` action to clone the repository code into the workflow environment.
+    
+    - **Set up Node.js**:
+        - Configures the Node.js environment according to the specified version from the matrix (`node` or `16.x`), using the `actions/setup-node@v4` action.
+    
+    - **Install Yarn**:
+        - Installs Yarn globally using `npm install -g yarn`.
 
-   - **Install Dependencies**:
-     - Navigates to the `./api` directory and installs the required dependencies by running `yarn`.
+    - **Install Dependencies**:
+        - Navigates to the `./api` directory and installs the required dependencies by running `yarn`.
 
-   - **Set up Environment Variables and Run Tests**:
-     - Defines necessary environment variables, `JWT_SECRET` and `ADMIN_JWT_SECRET`, using GitHub secrets to secure sensitive information. 
-     - Runs `yarn test` in the `./api` directory to execute the test suite for the backend.
+    - **Data Seeding (if applicable)**
+        - In this step seeds the database with initial data by executing yarn seed within the ./api directory
+
+    - **Set up Environment Variables and Run Tests**:
+        - Defines necessary environment variables, `JWT_SECRET` and `ADMIN_JWT_SECRET`, using GitHub secrets to secure sensitive information. 
+        - Runs `yarn test` in the `./api` directory to execute the test suite for the backend.
+3.  **Viewing Test Results in GitHub**
+
+    1. **Navigate to the Repository:**
+
+        Open your GitHub repository where the CI workflow is configured.
+
+    2. **Go to the Actions Tab:**
+
+        Click on the "Actions" tab near the top of the page. This tab shows all the workflow runs for your repository.
+
+    3. **Select the Workflow Run:**
+
+        Find the most recent run of your CI workflow (e.g., Api CI) from the list. Click on the run to view its details.
+
+### Running the Test Suite Locally
+- **Run test in local**
+
+    ```bash
+    yarn test
+    ```
+- **Viewing Test Results in local**
+
+    After running the tests, review the output in the terminal, which will show
+    - The number of tests run
+    - Tests that passed, failed, or were skipped
+    - Detailed error messages and stack traces for any failing tests
+
