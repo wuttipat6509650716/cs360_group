@@ -337,7 +337,7 @@ This GitHub Actions pipeline, named **Node.js CI**, is triggered on any push or 
      - Installs Yarn globally using `npm install -g yarn`.
 
    - **Install Dependencies**:
-     - Navigates to the `./api` directory and installs the required dependencies by running `yarn ci`.
+     - Navigates to the `./api` directory and installs the required dependencies by running `yarn`.
 
    - **Set up Environment Variables and Run Tests**:
      - Defines necessary environment variables, `JWT_SECRET` and `ADMIN_JWT_SECRET`, using GitHub secrets to secure sensitive information. 
