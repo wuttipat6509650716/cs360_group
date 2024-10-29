@@ -357,7 +357,40 @@ The tests in this repository cover the following functionality:
     - **Delete**: Confirm only authorized users can delete their profiles.
 
 ## Viewing Test Results
+To view the test results, you can check the **console output** or review the **coverage report** that provides details on code coverage.
+
+**Console output**
+
+```bash
+    yarn run v1.22.22
+$ jest --runInBand --coverage=true
+jest-haste-map: duplicate manual mock found: index
+  The following files share their name; please delete one of them:
+    * <rootDir>/.cache/admin/src/hooks/useAdminUsers/__mocks__/index.js
+    * <rootDir>/.cache/admin/src/hooks/useAdminRoles/__mocks__/index.js
+
+jest-haste-map: duplicate manual mock found: index
 ...
+
+ PASS  tests/integration/integration.test.js (12.343 s)
+ PASS  tests/unit/isOwner.test.js
+-----------------------------|---------|----------|---------|---------|-------------------
+File                         | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------------------------|---------|----------|---------|---------|-------------------
+All files                    |     100 |      100 |     100 |     100 |                   
+...
+-----------------------------|---------|----------|---------|---------|-------------------
+
+Test Suites: 2 passed, 2 total
+Tests:       14 passed, 14 total
+Time:        12.742 s, estimated 19 s
+Ran all test suites.
+Done in 14.30s.
+
+```
+
+**Coverage Report**
+- Upon completion, a coverage report will be generated at cs360_group/api/coverage/clover.xml. This report provides a comprehensive overview of the code coverage across various modules and functions, helping identify areas that may need additional tests for better coverage.
 ## Adding New Tests
 - **Unit Test**
     
