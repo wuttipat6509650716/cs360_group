@@ -378,3 +378,33 @@ The tests in this repository cover the following functionality:
     
 
 ## CI pipeline
+
+### Pipeline Overview
+This GitHub Actions pipeline, named **Node.js CI**, is triggered on any push or pull request to the `master` and `develop` branches, designed to automate the testing process across different operating systems (Ubuntu and Windows) and Node.js versions.
+
+### Workflow Structure
+
+1. **Trigger Conditions**:
+   - The pipeline runs on pushes and pull requests to the `master` and `develop` branches.
+
+2. **Job Configuration**:
+   - The workflow defines a single job called **test** that runs across multiple environments by using a **matrix strategy** to run the test concurrently on:
+     - **Operating Systems**: `ubuntu-latest` and `windows-latest`
+     - **Node.js Versions**: Latest stable Node.js and version 16.x
+
+3. **Job Steps**:
+   - **Checkout Code**: 
+     - Uses the `actions/checkout@v4` action to clone the repository code into the workflow environment.
+   
+   - **Set up Node.js**:
+     - Configures the Node.js environment according to the specified version from the matrix (`node` or `16.x`), using the `actions/setup-node@v4` action.
+   
+   - **Install Yarn**:
+     - Installs Yarn globally using `npm install -g yarn`.
+
+   - **Install Dependencies**:
+     - Navigates to the `./api` directory and installs the required dependencies by running `yarn`.
+
+   - **Set up Environment Variables and Run Tests**:
+     - Defines necessary environment variables, `JWT_SECRET` and `ADMIN_JWT_SECRET`, using GitHub secrets to secure sensitive information. 
+     - Runs `yarn test` in the `./api` directory to execute the test suite for the backend.
