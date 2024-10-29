@@ -424,8 +424,8 @@ YAML FILE : `api/github/workflows/Automate-Test.yml`
 
 2. **Job Configuration**:
    - The workflow defines a single job called **test** that runs across multiple environments by using a **matrix strategy** to run the test concurrently on:
-     - **Operating Systems**: `ubuntu`, `debian` and `redhat`
-     - **Node.js Versions**: Node version 16.x
+     - **Operating Systems**: `macos-latest` and `ubuntu-latest`
+     - **Node.js Versions**: Node version 16.x and 18.x
 
 3. **Job Steps**:
     - **Checkout Code**: 
