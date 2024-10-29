@@ -2,9 +2,11 @@ name: Api CI
 
 on:
   push:
-    branches:[master,develop,test_profile]
+    branches: 
+      - '*'
   pull_request:
-    branches:[master,develop]
+    branches:
+      - '*'
 
 jobs:
   test:
@@ -38,5 +40,6 @@ jobs:
       working-directory: ./api
       env:
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      run: echo "Environment variables set"
-      run: yarn test
+      run: |
+        echo "Environment variables set" 
+        yarn test
