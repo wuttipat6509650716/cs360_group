@@ -126,20 +126,20 @@ cd $API_PATH
 yarn
 
 # Set up API .env file
-if [ ! -f "${API_PATH}/.env" ]; then
+if [ ! -f ".env" ]; then
     echo "Creating .env for API"
-    touch  "${API_PATH}/.env"
+    touch  ".env"
 else
     echo ".env file for API already exists."
 fi
 
 
-check_and_add_to_env "HOST" "0.0.0.0" "${API_PATH}/.env"
+check_and_add_to_env "HOST" "0.0.0.0" ".env"
 check_and_add_to_env "PORT" "1337" ".env"
-check_and_add_to_env "STRAPI_ADMIN_CLIENT_URL" "http://${PUBLIC_IPV4}:3000" "${API_PATH}/.env"
-check_and_add_to_env "STRAPI_ADMIN_CLIENT_PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" "${path_api}/.env"
-check_and_add_to_env "JWT_SECRET" "$(openssl rand -base64 16)" "${API_PATH}/.env"
-check_and_add_to_env "NODE_ENV" "production" "${API_PATH}/.env"
+check_and_add_to_env "STRAPI_ADMIN_CLIENT_URL" "http://${PUBLIC_IPV4}:3000" ".env"
+check_and_add_to_env "STRAPI_ADMIN_CLIENT_PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" ".env"
+check_and_add_to_env "JWT_SECRET" "$(openssl rand -base64 16)" ".env"
+check_and_add_to_env "NODE_ENV" "production" ".env"
 
 yarn seed
 
@@ -150,9 +150,9 @@ pm2 start yarn --name Strapi_Api -- start
 cd $CLIENT_PATH
 
 
-if [ ! -f "${CLIENT_PATH}/.env" ]; then
+if [ ! -f ".env" ]; then
     echo "Creating .env for Client"
-    touch  "${CLIENT_PATH}/.env"
+    touch  ".env"
 else
     echo ".env file for Client already exists."
 fi
