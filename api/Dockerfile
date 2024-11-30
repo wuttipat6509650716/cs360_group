@@ -15,7 +15,7 @@ COPY . .
 
 RUN yarn seed
 # Expose the port your app runs on
-EXPOSE 3000
+EXPOSE 1337
 
 # Start the app
 CMD ["yarn", "start"]
