@@ -19,7 +19,11 @@
 
 ## Project Goal
 
-The goal of this project is to study deployment processes and automate 10 tests. the project will focus on enhancing and developing new features. that system can be deployed and accessed externally.
+Foodadvisor is a web platform that helps personalize food discovery content, such as blog posts, to match users' tastes. By allowing users to select their favorite food categories, the platform provides tailored recommendations, enhancing the user experience and encouraging greater engagement.
+
+The Register and Authentication feature allows users to create accounts and log in securely, while the Profile feature enables users to fill in public information, increasing their credibility within the platform.
+
+This platform solves the issue of information overload in the food industry, making it easier for users to find relevant and high-quality content. It also creates a valuable space for food enthusiasts, bloggers, and restaurants to connect meaningfully with their target audiences.
 
 ### Features CRUD
 
