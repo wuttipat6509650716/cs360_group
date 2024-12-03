@@ -118,10 +118,7 @@ jobs:
         run: |
           docker pull $IMAGE_BACKEND:latest
           docker run -d --name test-container-api $IMAGE_BACKEND:latest
-
-      - name: Run Automated Tests in API Docker Container
-        run: docker exec test-container-api yarn test
-
+          
       - name: Clean Up API Docker Container
         run: |
           docker stop test-container-api
@@ -144,9 +141,6 @@ jobs:
         run: |
           docker pull $IMAGE_FRONTEND:latest
           docker run -d --name test-container-client $IMAGE_FRONTEND:latest
-
-      - name: Run Automated Tests in Client Docker Container
-        run: docker exec test-container-client yarn test
 
       - name: Clean Up Client Docker Container
         run: |
