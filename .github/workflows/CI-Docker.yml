@@ -75,7 +75,7 @@ jobs:
 
       - name: Build Docker Image for API
         run: |
-          docker build -f api/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_api_image:latest .
+          docker build -f api/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_api_image:latest ./api
 
       - name: Push Docker Image for API to DockerHub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/foodadvisor_api_image:latest
@@ -96,7 +96,7 @@ jobs:
 
       - name: Build Docker Image for Client
         run: |
-          docker build -f client/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_client_image:latest .
+          docker build -f client/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_client_image:latest ./client
 
       - name: Push Docker Image for Client to DockerHub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/foodadvisor_client_image:latest
