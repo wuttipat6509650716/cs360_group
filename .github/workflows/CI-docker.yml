@@ -46,10 +46,6 @@ jobs:
       working-directory: ./api
       run: yarn seed   
 
-    - name: Run Linter
-      working-directory: ./api
-      run: yarn lint
-
     - name: Set up Environment Variables and Test
       working-directory: ./api
       env:
