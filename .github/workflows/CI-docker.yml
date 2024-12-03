@@ -60,7 +60,6 @@ jobs:
         path: ./api/test-results/
 
   build-docker:
-    needs: test-source-code
     runs-on: ubuntu-latest
 
     steps:
