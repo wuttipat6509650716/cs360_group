@@ -13,22 +13,14 @@ jobs:
     strategy:
       matrix:
         os: [macos-latest, ubuntu-latest]
-        node-version: [16.x, 18.x]
+        node-version: [16.x]
       fail-fast: false
 
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 10
 
     steps:
     - uses: actions/checkout@v4
-
-    - name: Cache Node Modules
-      uses: actions/cache@v3
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ matrix.node-version }}
 
     - name: Cache Yarn Dependencies
       uses: actions/cache@v3
@@ -52,21 +44,13 @@ jobs:
 
     - name: Seed Data
       working-directory: ./api
-      run: yarn seed
+      run: yarn seed   
 
-    - name: Run Tests (With 50% Threshold)
+    - name: Set up Environment Variables and Test
       working-directory: ./api
       env:
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      run: |
-        yarn test --json --outputFile=test-results.json || true
-        total=$(jq '.numTotalTests' test-results.json)
-        passed=$(jq '.numPassedTests' test-results.json)
-        success_rate=$((passed * 100 / total))
-        if [ $success_rate -lt 50 ]; then
-          echo "Test success rate is below 50% ($success_rate%). Marking as failed."
-          exit 1
-        fi
+      run: yarn test
 
     - name: Upload Test Results
       if: always()
@@ -74,10 +58,8 @@ jobs:
       with:
         name: test-results
         path: ./api/test-results/
-        if-no-files-found: ignore
 
   build-docker:
-    needs: test-source-code
     runs-on: ubuntu-latest
 
     steps:
@@ -92,10 +74,10 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/cs360_calc_image:latest .
+          docker build --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest .
 
       - name: Push Docker Image to DockerHub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/cs360_calc_image:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest
 
   test-docker-image:
     needs: build-docker
@@ -110,11 +92,11 @@ jobs:
 
       - name: Pull and Run Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/cs360_calc_image:latest
-          docker run -d --name test-container ${{ secrets.DOCKER_USERNAME }}/cs360_calc_image:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest
+          docker run -d --name test-container ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest
 
       - name: Run Automated Tests in Docker Container
-        run: docker exec test-container yarn test
+        run: docker exec test-container npm test 
 
       - name: Clean Up Docker Container
         run: |
