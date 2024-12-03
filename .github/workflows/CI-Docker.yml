@@ -1,12 +1,12 @@
 name: CI - Test Source Code and Docker Image
 
 on:
-  push:
-    branches: 
-      - '*'
-  pull_request:
-    branches:
-      - '*'
+    push:
+      branches:
+        - main
+    pull_request:
+      branches:
+        - main
 
 jobs:
   test-source-code:
@@ -60,7 +60,6 @@ jobs:
         path: ./api/test-results/
 
   build-docker-api:
-    needs: test-source-code
     runs-on: ubuntu-latest
 
     steps:
@@ -81,7 +80,6 @@ jobs:
         run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
   build-docker-client:
-    needs: test-source-code
     runs-on: ubuntu-latest
 
     steps:
@@ -118,7 +116,7 @@ jobs:
         run: |
           docker pull $IMAGE_BACKEND:latest
           docker run -d --name test-container-api $IMAGE_BACKEND:latest
-          
+
       - name: Clean Up API Docker Container
         run: |
           docker stop test-container-api
