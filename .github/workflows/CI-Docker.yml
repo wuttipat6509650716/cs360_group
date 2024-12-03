@@ -75,10 +75,10 @@ jobs:
 
       - name: Build Docker Image for API
         run: |
-          docker build -f api/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_BACKEND }}:latest ./api
+          docker build -f api/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest ./api
 
       - name: Push Docker Image for API to DockerHub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_BACKEND }}:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
   build-docker-client:
     needs: test-source-code
@@ -96,14 +96,16 @@ jobs:
 
       - name: Build Docker Image for Client
         run: |
-          docker build -f client/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_FRONTEND }}:latest ./client
+          docker build -f client/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest ./client
 
       - name: Push Docker Image for Client to DockerHub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_FRONTEND }}:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest
 
   test-docker-image-api:
     needs: build-docker-api
     runs-on: ubuntu-latest
+    env:
+      IMAGE_BACKEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend
 
     steps:
       - name: Log in to DockerHub
@@ -114,8 +116,8 @@ jobs:
 
       - name: Pull and Run Docker Image for API
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_BACKEND }}:latest
-          docker run -d --name test-container-api ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_BACKEND }}:latest
+          docker pull $IMAGE_BACKEND:latest
+          docker run -d --name test-container-api $IMAGE_BACKEND:latest
 
       - name: Run Automated Tests in API Docker Container
         run: docker exec test-container-api yarn test
@@ -128,6 +130,8 @@ jobs:
   test-docker-image-client:
     needs: build-docker-client
     runs-on: ubuntu-latest
+    env:
+      IMAGE_FRONTEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend
 
     steps:
       - name: Log in to DockerHub
@@ -138,8 +142,8 @@ jobs:
 
       - name: Pull and Run Docker Image for Client
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_FRONTEND }}:latest
-          docker run -d --name test-container-client ${{ secrets.DOCKER_USERNAME }}/${{ secrets.IMAGE_FRONTEND }}:latest
+          docker pull $IMAGE_FRONTEND:latest
+          docker run -d --name test-container-client $IMAGE_FRONTEND:latest
 
       - name: Run Automated Tests in Client Docker Container
         run: docker exec test-container-client yarn test
