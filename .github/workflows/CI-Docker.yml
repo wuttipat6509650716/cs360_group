@@ -75,10 +75,10 @@ jobs:
 
       - name: Build Docker Image for API
         run: |
-          docker build -f api/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_api_image:latest ./api
+          docker build -f api/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest ./api
 
       - name: Push Docker Image for API to DockerHub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/foodadvisor_api_image:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
   build-docker-client:
     needs: test-source-code
@@ -96,55 +96,7 @@ jobs:
 
       - name: Build Docker Image for Client
         run: |
-          docker build -f client/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_client_image:latest ./client
+          docker build -f client/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest ./client
 
       - name: Push Docker Image for Client to DockerHub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/foodadvisor_client_image:latest
-
-  test-docker-image-api:
-    needs: build-docker-api
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Pull and Run Docker Image for API
-        run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/foodadvisor_api_image:latest
-          docker run -d --name test-container-api ${{ secrets.DOCKER_USERNAME }}/foodadvisor_api_image:latest
-
-      - name: Run Automated Tests in API Docker Container
-        run: docker exec test-container-api yarn test
-
-      - name: Clean Up API Docker Container
-        run: |
-          docker stop test-container-api
-          docker rm test-container-api
-
-  test-docker-image-client:
-    needs: build-docker-client
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
-
-      - name: Pull and Run Docker Image for Client
-        run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/foodadvisor_client_image:latest
-          docker run -d --name test-container-client ${{ secrets.DOCKER_USERNAME }}/foodadvisor_client_image:latest
-
-      - name: Run Automated Tests in Client Docker Container
-        run: docker exec test-container-client yarn test
-
-      - name: Clean Up Client Docker Container
-        run: |
-          docker stop test-container-client
-          docker rm test-container-client
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest
