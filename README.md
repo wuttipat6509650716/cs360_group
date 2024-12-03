@@ -406,9 +406,37 @@ Done in 14.30s.
     1. **Create a Directory for Each API**
 
         Create a new folder named after the API you intend to test. For example, if you're testing the profile API, the folder structure would be:
-    2. **Create index.js Inside the API Folder** eg. authen/index.js
+        
+        ```bash
+        #Test folder Structure
+        tests/
+            └── integration/
+                └── <api-name>/ #name of integration test
+                        └── index.js
+
+        ```
+
+    2. **Create index.js Inside the API Folder** eg. profile/index.js
         
         In this file implement test for Api
+
+        For Example :
+        ```javascript
+        //<api-name>/index.js
+        const { describe, beforeAll, it, expect } = require("@jest/globals");
+
+        describe('API Integration Test',()=>{
+
+            beforeAll(async () => {
+
+            });
+
+            it("Test Description",async ()=>{
+                
+            });
+
+        })
+        ```
     3. **Modify `integration.test.js`**
 
         Add `require('./name/index');` in under file
