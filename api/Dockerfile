@@ -14,6 +14,8 @@ RUN yarn install
 COPY . .
 
 RUN yarn seed
+
+RUN yarn build
 # Expose the port your app runs on
 EXPOSE 1337
 
