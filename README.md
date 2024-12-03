@@ -274,6 +274,13 @@ In this project, we use several essential tools for both Unit and Integration Te
 - **Supertest**: A tool used to test HTTP endpoints in Integration Tests, simulating HTTP requests sent to the API and checking responses such as status codes and response content.
 - **Strapi Testing Utils**: A utility set for simulating Strapi’s operations during testing, used to set up and tear down the Strapi instance before and after tests, enabling API and middleware testing that mirrors real-environment functionality.
 
+### Number of Test Cases:
+- **Unit Tests**: 7 test cases, covering the functionality of the custom middleware isOwner, including scenarios for authentication, missing or invalid IDs, non-existent profiles, and authorization checks.
+- **Integration** Tests: 6 test cases, focusing on the Profile API endpoints (/api/profiles) including creating, retrieving, updating, and deleting user profiles, as well as validating ownership and permissions.
+
+### Tested Features:
+- **Profile Feature**: This includes integration tests for creating, updating, deleting, and retrieving user profiles, along with unit tests to ensure the correct behavior of the isOwner middleware.
+
 
 ## Setting Up Tests
 - Install test tools
