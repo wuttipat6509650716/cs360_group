@@ -19,24 +19,15 @@
 
 ## Table of Contents
 - [Project Goal](#project-goal)
-    - [Features CRUD](#features-crud)
-    - [Technologies Used](#technologies-used)
-    - [Software Require](#software-require)
+- [Features CRUD](#features-crud)
+- [Technologies Used](#technologies-used)
+- [Software Require](#software-require)
 - [Setup AWS EC2 Instance](#setup-aws-ec2-instance)
 - [How to Deploy and Run the Project Manually](#how-to-deploy-and-run-the-project-manually)
     - [Step-by-Step Guide](#step-by-step-guide)
-        - [1. Install NVM on the AWS Instance](#1-install-nvm-on-the-aws-instance)
-        - [2. Install Yarn on the AWS Instance](#2-install-yarn-on-the-aws-instance)
-        - [3. Install pm2 on the AWS Instance](#3-install-pm2-on-the-aws-instance)
-        - [4. Setup Environment](#4-setup-environment)
-        - [5. Start Project](#5-start-project)
     - [Strapi User Roles and Access](#strapi-user-roles-and-access)
 - [How to Deploy and Run the Project Using Bash Script](#how-to-deploy-and-run-the-project-using-bash-script)
     - [Step-by-Step Guide](#step-by-step-guide-1)
-        - [1. Install Git on the AWS Instance](#1-install-git-on-the-aws-instance)
-        - [2. Clone the Repository from GitHub](#2-clone-the-repository-from-github)
-        - [3. Check the Permissions of start.sh](#3-check-the-permissions-of-startsh)
-        - [4. Run the start.sh Script](#4-run-the-startsh-script)
 - [Unit and Integration Testing Overview](#unit-and-integration-testing-overview)
     - [Number of Test Cases](#number-of-test-cases)
     - [Tested Features](#tested-features)
@@ -49,7 +40,7 @@
 - [GitHub Action CI Pipeline](#github-action-ci-pipeline)
     - [Pipeline Overview](#pipeline-overview)
     - [Workflow Structure](#workflow-structure)
-     - [Running the Test Suite Locally](#running-the-test-suite-locally)
+    - [Running the Test Suite Locally](#running-the-test-suite-locally)
 ## Project Goal
 
 Foodadvisor is a web platform that helps personalize food discovery content, such as blog posts, to match users' tastes. By allowing users to select their favorite food categories, the platform provides tailored recommendations, enhancing the user experience and encouraging greater engagement.
