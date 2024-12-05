@@ -1,12 +1,13 @@
 name: CI - Test Source Code and Docker Image
 
 on:
-  push:
-    branches: 
-      - '*'
-  pull_request:
-    branches:
-      - '*'
+    push:
+      branches:
+        - develop
+    pull_request:
+      branches:
+        - main
+    workflow_dispatch: 
 
 jobs:
   test-source-code:
@@ -44,7 +45,7 @@ jobs:
 
     - name: Seed Data
       working-directory: ./api
-      run: yarn seed   
+      run: yarn seed
 
     - name: Set up Environment Variables and Test
       working-directory: ./api
@@ -59,8 +60,7 @@ jobs:
         name: test-results
         path: ./api/test-results/
 
-  build-docker:
-    needs: test-source-code
+  build-docker-api:
     runs-on: ubuntu-latest
 
     steps:
@@ -73,33 +73,75 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build Docker Image
+      - name: Build Docker Image for API
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest .
+          docker build -f api/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest ./api
 
-      - name: Push Docker Image to DockerHub
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest
+      - name: Push Docker Image for API to DockerHub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend:latest
 
-  test-docker-image:
-    needs: build-docker
+  build-docker-client:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
       - name: Log in to DockerHub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Pull and Run Docker Image
+      - name: Build Docker Image for Client
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest
-          docker run -d --name test-container ${{ secrets.DOCKER_USERNAME }}/foodadvisor_image:latest
+          docker build -f client/Dockerfile --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} -t ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest ./client
 
-      - name: Run Automated Tests in Docker Container
-        run: docker exec test-container npm test 
+      - name: Push Docker Image for Client to DockerHub
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest
 
-      - name: Clean Up Docker Container
-        run: |
-          docker stop test-container
-          docker rm test-container
+  # test-docker-image-api:
+  #   needs: build-docker-api
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     IMAGE_BACKEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend
+
+  #   steps:
+  #     - name: Log in to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_TOKEN }}
+
+  #     - name: Pull and Run Docker Image for API
+  #       run: |
+  #         docker pull $IMAGE_BACKEND:latest
+  #         docker run -d --name test-container-api $IMAGE_BACKEND:latest
+
+  #     - name: Clean Up API Docker Container
+  #       run: |
+  #         docker stop test-container-api
+  #         docker rm test-container-api
+
+  # test-docker-image-client:
+  #   needs: build-docker-client
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     IMAGE_FRONTEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend
+
+  #   steps:
+  #     - name: Log in to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_TOKEN }}
+
+  #     - name: Pull and Run Docker Image for Client
+  #       run: |
+  #         docker pull $IMAGE_FRONTEND:latest
+  #         docker run -d --name test-container-client $IMAGE_FRONTEND:latest
+
+  #     - name: Clean Up Client Docker Container
+  #       run: |
+  #         docker stop test-container-client
+  #         docker rm test-container-client
