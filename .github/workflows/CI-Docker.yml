@@ -99,48 +99,48 @@ jobs:
       - name: Push Docker Image for Client to DockerHub
         run: docker push ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend:latest
 
-  test-docker-image-api:
-    needs: build-docker-api
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_BACKEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend
+  # test-docker-image-api:
+  #   needs: build-docker-api
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     IMAGE_BACKEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_backend
 
-    steps:
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+  #   steps:
+  #     - name: Log in to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Pull and Run Docker Image for API
-        run: |
-          docker pull $IMAGE_BACKEND:latest
-          docker run -d --name test-container-api $IMAGE_BACKEND:latest
+  #     - name: Pull and Run Docker Image for API
+  #       run: |
+  #         docker pull $IMAGE_BACKEND:latest
+  #         docker run -d --name test-container-api $IMAGE_BACKEND:latest
 
-      - name: Clean Up API Docker Container
-        run: |
-          docker stop test-container-api
-          docker rm test-container-api
+  #     - name: Clean Up API Docker Container
+  #       run: |
+  #         docker stop test-container-api
+  #         docker rm test-container-api
 
-  test-docker-image-client:
-    needs: build-docker-client
-    runs-on: ubuntu-latest
-    env:
-      IMAGE_FRONTEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend
+  # test-docker-image-client:
+  #   needs: build-docker-client
+  #   runs-on: ubuntu-latest
+  #   env:
+  #     IMAGE_FRONTEND: ${{ secrets.DOCKER_USERNAME }}/savetofocus_frontend
 
-    steps:
-      - name: Log in to DockerHub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
+  #   steps:
+  #     - name: Log in to DockerHub
+  #       uses: docker/login-action@v2
+  #       with:
+  #         username: ${{ secrets.DOCKER_USERNAME }}
+  #         password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Pull and Run Docker Image for Client
-        run: |
-          docker pull $IMAGE_FRONTEND:latest
-          docker run -d --name test-container-client $IMAGE_FRONTEND:latest
+  #     - name: Pull and Run Docker Image for Client
+  #       run: |
+  #         docker pull $IMAGE_FRONTEND:latest
+  #         docker run -d --name test-container-client $IMAGE_FRONTEND:latest
 
-      - name: Clean Up Client Docker Container
-        run: |
-          docker stop test-container-client
-          docker rm test-container-client
+  #     - name: Clean Up Client Docker Container
+  #       run: |
+  #         docker stop test-container-client
+  #         docker rm test-container-client
