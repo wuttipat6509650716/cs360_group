@@ -111,9 +111,10 @@ jobs:
           -e HOST=0.0.0.0 \
           -e PORT=1337 \
           -e STRAPI_ADMIN_CLIENT_URL=http://${INSTANCE_PUBLIC_IPV4}:3000 \
-          -e STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=${{ secrets.PREVIEW_SECRET }} \
+          -e STRAPI_ADMIN_CLIENT_PREVIEW_SECRET=${{ secrets.STRAPI_ADMIN_CLIENT_PREVIEW_SECRET }} \
           $REPOSITORYBACK:latest
           echo "FRONTEND"
+          echo $REPOSITORYFRONT:latest
           sudo docker pull $REPOSITORYFRONT:latest
           sudo docker run -d --name frontend_savetofocus \
           -p 3000:3000 \
