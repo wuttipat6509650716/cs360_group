@@ -1,12 +1,12 @@
 name: Api CI
 
 on:
-  # push:
-  #   branches: 
-  #     - '*'
-  # pull_request:
-  #   branches:
-  #     - '*'
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - main
 
 jobs:
   test:
