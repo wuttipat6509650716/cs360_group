@@ -63,7 +63,7 @@ jobs:
 
   build-docker-api:
     runs-on: ubuntu-latest
-
+    needs: test-source-code
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -83,7 +83,7 @@ jobs:
 
   build-docker-client:
     runs-on: ubuntu-latest
-
+    needs: test-source-code
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
