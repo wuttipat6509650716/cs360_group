@@ -14,9 +14,8 @@ RUN yarn install
 # Copy the entire application source code
 COPY . .
 
-RUN yarn build
 # Expose the port your app runs on
 EXPOSE 3000
 
 # Start the app
-CMD ["yarn", "start"]`
+CMD ["sh", "-c", "yarn build && yarn start"]
