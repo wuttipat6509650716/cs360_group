@@ -3,10 +3,11 @@ name: CI - Test Source Code and Docker Image
 on:
   push:
     branches:
-      - develop
+      - '*'
   pull_request:
     branches:
       - main
+      - develop
   workflow_dispatch: 
 
 jobs:
