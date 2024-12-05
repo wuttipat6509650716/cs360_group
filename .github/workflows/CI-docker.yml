@@ -1,13 +1,13 @@
 name: CI - Test Source Code and Docker Image
 
 on:
-    push:
-      branches:
-        - develop
-    pull_request:
-      branches:
-        - main
-    workflow_dispatch: 
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: 
 
 jobs:
   test-source-code:
