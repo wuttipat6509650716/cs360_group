@@ -17,9 +17,37 @@
 |Punnatut Maneewong |6509650542|
 |Wuttipat Pipopsukawadee |6509650716|
 
+## Table of Contents
+- [Project Goal](#project-goal)
+- [Features CRUD](#features-crud)
+- [Technologies Used](#technologies-used)
+- [Software Require](#software-require)
+- [Setup AWS EC2 Instance](#setup-aws-ec2-instance)
+- [How to Deploy and Run the Project Manually](#how-to-deploy-and-run-the-project-manually)
+    - [Step-by-Step Guide](#step-by-step-guide)
+    - [Strapi User Roles and Access](#strapi-user-roles-and-access)
+- [How to Deploy and Run the Project Using Bash Script](#how-to-deploy-and-run-the-project-using-bash-script)
+    - [Step-by-Step Guide](#step-by-step-guide-1)
+- [Unit and Integration Testing Overview](#unit-and-integration-testing-overview)
+    - [Number of Test Cases](#number-of-test-cases)
+    - [Tested Features](#tested-features)
+- [Setting Up Tests](#setting-up-tests)
+- [Running Tests](#running-tests)
+- [Test File Structure](#test-file-structure)
+- [Test Coverage](#test-coverage)
+- [Viewing Test Results](#viewing-test-results)
+- [Adding New Tests](#adding-new-tests)
+- [GitHub Action CI Pipeline](#github-action-ci-pipeline)
+    - [Pipeline Overview](#pipeline-overview)
+    - [Workflow Structure](#workflow-structure)
+    - [Running the Test Suite Locally](#running-the-test-suite-locally)
 ## Project Goal
 
-The goal of this project is to study deployment processes and automate 10 tests. the project will focus on enhancing and developing new features. that system can be deployed and accessed externally.
+Foodadvisor is a web platform that helps personalize food discovery content, such as blog posts, to match users' tastes. By allowing users to select their favorite food categories, the platform provides tailored recommendations, enhancing the user experience and encouraging greater engagement.
+
+The Register and Authentication feature allows users to create accounts and log in securely, while the Profile feature enables users to fill in public information, increasing their credibility within the platform.
+
+This platform solves the issue of information overload in the food industry, making it easier for users to find relevant and high-quality content. It also creates a valuable space for food enthusiasts, bloggers, and restaurants to connect meaningfully with their target audiences.
 
 ### Features CRUD
 
@@ -270,6 +298,13 @@ In this project, we use several essential tools for both Unit and Integration Te
 - **Supertest**: A tool used to test HTTP endpoints in Integration Tests, simulating HTTP requests sent to the API and checking responses such as status codes and response content.
 - **Strapi Testing Utils**: A utility set for simulating Strapi’s operations during testing, used to set up and tear down the Strapi instance before and after tests, enabling API and middleware testing that mirrors real-environment functionality.
 
+### Number of Test Cases:
+- **Unit Tests**: 7 test cases, covering the functionality of the custom middleware isOwner, including scenarios for authentication, missing or invalid IDs, non-existent profiles, and authorization checks.
+- **Integration** Tests: 6 test cases, focusing on the Profile API endpoints (/api/profiles) including creating, retrieving, updating, and deleting user profiles, as well as validating ownership and permissions.
+
+### Tested Features:
+- **Profile Feature**: This includes integration tests for creating, updating, deleting, and retrieving user profiles, along with unit tests to ensure the correct behavior of the isOwner middleware.
+
 
 ## Setting Up Tests
 - Install test tools
@@ -402,74 +437,160 @@ Done in 14.30s.
     1. **Create a Directory for Each API**
 
         Create a new folder named after the API you intend to test. For example, if you're testing the profile API, the folder structure would be:
-    2. **Create index.js Inside the API Folder** eg. authen/index.js
+        
+        ```bash
+        #Test folder Structure
+        tests/
+            └── integration/
+                └── <api-name>/ #name of integration test
+                        └── index.js
+
+        ```
+
+    2. **Create index.js Inside the API Folder** eg. profile/index.js
         
         In this file implement test for Api
+
+        For Example :
+        ```javascript
+        //<api-name>/index.js
+        const { describe, beforeAll, it, expect } = require("@jest/globals");
+
+        describe('API Integration Test',()=>{
+
+            beforeAll(async () => {
+
+            });
+
+            it("Test Description",async ()=>{
+                
+            });
+
+        })
+        ```
     3. **Modify `integration.test.js`**
 
         Add `require('./name/index');` in under file
     
 
-## GitHub Action CI pipeline
+## GitHub Action CI/CD pipeline
 
-### Pipeline Overview
-This GitHub Actions pipeline, named **Api CI**, is triggered on any push or pull request to All branches, designed to automate the testing process across different operating systems (Ubuntu ,ubuntu, redhat) and Node.js versions.
+### CI/CD Pipeline Overview
 
-### Workflow Structure
+This project utilizes three GitHub Actions workflows to automate testing, building, and deployment processes. These workflows help maintain code quality and consistency across different environments, improving overall development efficiency.
 
-YAML FILE : `api/github/workflows/Automate-Test.yml`
+### CI Workflow: `Automate-Test.yml`
 
-1. **Trigger Conditions**:
-   - The pipeline runs on pushes and pull requests to All branches.
+**Trigger Conditions:**
 
-2. **Job Configuration**:
-   - The workflow defines a single job called **test** that runs across multiple environments by using a **matrix strategy** to run the test concurrently on:
-     - **Operating Systems**: `macos-latest` and `ubuntu-latest`
-     - **Node.js Versions**: Node version 16.x and 18.x
+- Triggered when:
+  - A push is made to the `develop` branch.
+  - A pull request targets the `main` branch.
 
-3. **Job Steps**:
-    - **Checkout Code**: 
-        - Uses the `actions/checkout@v4` action to clone the repository code into the workflow environment.
-    
-    - **Set up Node.js**:
-        - Configures the Node.js environment according to the specified version from the matrix (`node` or `16.x`), using the `actions/setup-node@v4` action.
-    
-    - **Install Yarn**:
-        - Installs Yarn globally using `npm install -g yarn`.
+**Job Configuration:**
 
-    - **Install Dependencies**:
-        - Navigates to the `./api` directory and installs the required dependencies by running `yarn`.
+- **Job Name:** `test`
+- **Matrix Strategy:**
+  - Operating Systems: `macos-latest`, `ubuntu-latest`
+  - Node.js Versions: `16.x`, `18.x`
+  - Jobs run concurrently for each combination.
+  - Timeout: 5 minutes per job.
 
-    - **Data Seeding (if applicable)**
-        - In this step seeds the database with initial data by executing yarn seed within the ./api directory
+**Steps:**
 
-    - **Set up Environment Variables and Run Tests**:
-        - Defines necessary environment variables, `JWT_SECRET` and `ADMIN_JWT_SECRET`, using GitHub secrets to secure sensitive information. 
-        - Runs `yarn test` in the `./api` directory to execute the test suite for the backend.
-3.  **Viewing Test Results in GitHub**
+1. **Checkout Code:** Uses `actions/checkout@v4` to fetch code from the repository.
+2. **Setup Node.js:** Configures Node.js versions based on the matrix using `actions/setup-node@v4`.
+3. **Install Yarn:** Installs Yarn globally using `npm install -g yarn`.
+4. **Install Dependencies:** Installs project dependencies from the `./api` folder.
+5. **Seed Data (if available):** Seeds initial data into the database using `yarn seed`.
+6. **Run Tests:** Runs backend tests, using GitHub secrets for environment variables like `JWT_SECRET`.
 
-    1. **Navigate to the Repository:**
+### CI Workflow: `CI-docker.yml`
 
-        Open your GitHub repository where the CI workflow is configured.
+**Trigger Conditions:**
 
-    2. **Go to the Actions Tab:**
+- Triggered when:
+  - A push is made to any branch.
+  - A pull request targets `main` or `develop`.
+  - Manually triggered using `workflow_dispatch`.
 
-        Click on the "Actions" tab near the top of the page. This tab shows all the workflow runs for your repository.
+**Jobs:**
 
-    3. **Select the Workflow Run:**
+1. **Test Source Code:**
+   - Tests are similar to the `Automate-Test.yml` workflow.
+   - **Matrix Strategy:**
+     - Operating Systems: `macos-latest`, `ubuntu-latest`
+     - Node.js Version: `16.x`
 
-        Find the most recent run of your CI workflow (e.g., Api CI) from the list. Click on the run to view its details.
+   **Steps:**
 
-### Running the Test Suite Locally
-- **Run test in local**
+   - Cache dependencies using `actions/cache@v3`.
+   - Setup Node.js and Yarn.
+   - Install dependencies and seed data from the `./api` folder.
+   - Run tests and upload results as artifacts.
 
+2. **Build Docker Images:**
+   - Builds and pushes Docker images for both API and Client:
+     - Create an API Docker image from `./api`.
+     - Create a Client Docker image from `./client`.
+     - Log in to DockerHub and push images tagged as `latest`.
+
+### CD Workflow: `cd.yml`
+
+**Trigger Conditions:**
+
+- Triggered when:
+  - A push is made to any branch.
+  - Manually triggered using `workflow_dispatch`.
+
+**Job: `check-image-and-deploy`**
+
+1. **Check Docker Image Availability:**
+   - Verifies that the latest versions of the backend and frontend images are available on DockerHub.
+
+2. **Set AWS Credentials:**
+   - Uses GitHub secrets to configure AWS credentials for deployment:
+     - `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`, `AWS_REGION`, `AWS_SG_ID`, `AWS_KEY_PEM`, `AWS_KP_NAME`, `DOCKER_USERNAME`, `DOCKER_TOKEN`, `SSH_USER`, `JWT_SECRET`, `PREVIEW_SECRET`, `STRAPI_ADMIN_CLIENT_PREVIEW_SECRET`.
+
+3. **Deploy to EC2:**
+   - Creates a new EC2 instance using `aws ec2 run-instances`.
+   - SSH into EC2 using GitHub secrets and set up the environment.
+   - Pull and run backend and frontend Docker containers on the EC2 instance.
+   - Expose services:
+     - Backend: `http://<INSTANCE_PUBLIC_IPV4>:1337/`
+     - Frontend: `http://<INSTANCE_PUBLIC_IPV4>:3000/`
+
+### Viewing Test Results in GitHub Actions
+
+1. Navigate to the **Actions** tab in your repository.
+2. Select the workflow run you want to view (e.g., `Api CI` or `CI-docker`).
+3. View detailed logs for each job and step.
+4. If artifacts (e.g., `test-results`) are uploaded, you can download and inspect them.
+
+### Running Tests Locally
+
+**Prerequisites:**
+
+- Install Node.js (versions 16.x or 18.x).
+- Install the Yarn package manager.
+
+**Steps:**
+
+1. **Install Dependencies:**
+   ```bash
+   cd api
+   yarn
+2. **Seed Data (if available):**
+    ```bash
+    yarn seed
+3. **Install Dependencies:**
     ```bash
     yarn test
-    ```
-- **Viewing Test Results in local**
 
-    After running the tests, review the output in the terminal, which will show
-    - The number of tests run
-    - Tests that passed, failed, or were skipped
-    - Detailed error messages and stack traces for any failing tests
+**Viewing Test Results Locally:**
 
+The terminal will display:
+
+   - Total number of tests.
+   - Number of tests passed, failed, or skipped.
+   - Error messages and stack traces (if any tests fail).
