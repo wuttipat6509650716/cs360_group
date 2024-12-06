@@ -513,8 +513,8 @@ This project utilizes three GitHub Actions workflows to automate testing, buildi
 **Trigger Conditions:**
 
 - Triggered when:
-  - A push is made to any branch.
-  - A pull request targets `main` or `develop`.
+  - A push is made to `main` branch.
+  - A pull request targets `main` .
   - Manually triggered using `workflow_dispatch`.
 
 **Jobs:**
