@@ -37,10 +37,13 @@
 - [Test Coverage](#test-coverage)
 - [Viewing Test Results](#viewing-test-results)
 - [Adding New Tests](#adding-new-tests)
-- [GitHub Action CI Pipeline](#github-action-ci-pipeline)
-    - [Pipeline Overview](#pipeline-overview)
-    - [Workflow Structure](#workflow-structure)
-    - [Running the Test Suite Locally](#running-the-test-suite-locally)
+- [GitHub Action CI/CD Pipeline](#github-action-cicd-pipeline)
+  - [CI/CD Pipeline Overview](#cicd-pipeline-overview)
+  - [CI Workflow: `Automate-Test.yml`](#ci-workflow-automatetestyml)
+  - [CI Workflow: `CI-docker.yml`](#ci-workflow-ci-dockeryml)
+  - [CD Workflow: `cd.yml`](#cd-workflow-cdyml)
+  - [Viewing Test Results in GitHub Actions](#viewing-test-results-in-github-actions)
+  - [Running Tests Locally](#running-tests-locally)
 ## Project Goal
 
 Foodadvisor is a web platform that helps personalize food discovery content, such as blog posts, to match users' tastes. By allowing users to select their favorite food categories, the platform provides tailored recommendations, enhancing the user experience and encouraging greater engagement.
@@ -510,8 +513,8 @@ This project utilizes three GitHub Actions workflows to automate testing, buildi
 **Trigger Conditions:**
 
 - Triggered when:
-  - A push is made to any branch.
-  - A pull request targets `main` or `develop`.
+  - A push is made to `main` branch.
+  - A pull request targets `main` .
   - Manually triggered using `workflow_dispatch`.
 
 **Jobs:**
