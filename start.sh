@@ -121,6 +121,7 @@ source ~/.bashrc
 # Set up API environment
 API_PATH=$BASE_PATH/api
 CLIENT_PATH=$BASE_PATH/client
+PREVIEW_SECRET=$(openssl rand -base64 16)
 
 cd $API_PATH
 yarn
@@ -137,7 +138,7 @@ fi
 check_and_add_to_env "HOST" "0.0.0.0" ".env"
 check_and_add_to_env "PORT" "1337" ".env"
 check_and_add_to_env "STRAPI_ADMIN_CLIENT_URL" "http://${PUBLIC_IPV4}:3000" ".env"
-check_and_add_to_env "STRAPI_ADMIN_CLIENT_PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" ".env"
+check_and_add_to_env "STRAPI_ADMIN_CLIENT_PREVIEW_SECRET" "${PREVIEW_SECRET}" ".env"
 check_and_add_to_env "JWT_SECRET" "$(openssl rand -base64 16)" ".env"
 check_and_add_to_env "NODE_ENV" "production" ".env"
 
@@ -162,7 +163,7 @@ yarn
 
 
 check_and_add_to_env "NEXT_PUBLIC_API_URL" "http://${PUBLIC_IPV4}:1337" ".env"
-check_and_add_to_env "PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" ".env"
+check_and_add_to_env "PREVIEW_SECRET" "${PREVIEW_SECRET}" ".env"
 
 echo "Building Next.js..."
 yarn build
