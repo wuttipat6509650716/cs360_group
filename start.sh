@@ -1,36 +1,36 @@
 #!/bin/bash
 
-#Define
-base_path=$(pwd)
-echo "$base_path"
+# Define base path
+BASE_PATH=$(pwd)
+echo "Base path: $BASE_PATH"
 
-# Update package lists And install curl
-echo "อัปเดต package lists..."
+# Update package lists and install curl
+echo "Updating package lists..."
 if command -v apt &> /dev/null; then
-    echo "This system uses apt"
+    echo "Detected apt package manager"
     sudo apt update && sudo apt upgrade -y
 elif command -v yum &> /dev/null; then
-    echo "This system uses yum"
+    echo "Detected yum package manager"
     sudo yum check-update || sudo yum update -y
 else
-    echo "Unsupported package manager"
+    echo "Unsupported package manager. Exiting."
 fi
 
 if command -v curl &> /dev/null; then
     echo "curl is already installed."
 else
-    echo "curl is not installed. Installing..."
+    echo "curl is not installed. Installing curl..."
     sudo yum install -y curl
 fi
 
-publicIPv4=$(curl ipinfo.io/ip)
+PUBLIC_IPV4=$(curl ipinfo.io/ip)
 
 install_git(){
     sudo yum install git
 }
 
 install_nvm(){
-    echo "Installing NodeJs V.16"
+    echo "Installing Node.js version 16..."
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.0/install.sh | bash
     source ~/.bashrc
     nvm install 16
@@ -49,7 +49,7 @@ check_and_add_to_env() {
     fi
 }
 
-# NodeJs Check
+
 if command -v node &> /dev/null; then
     NODE_VERSION=$(node -v)
     NPM_VERSION=$(npm -v)
@@ -74,7 +74,7 @@ else
     fi
 fi
 
-# Git Check
+
 if command -v git &> /dev/null; then
     echo "Git is already installed. Git: $(git --version)"
 else
@@ -88,7 +88,7 @@ else
     fi
 fi
 
-# pm2 Check
+
 if command -v pm2 &> /dev/null; then
     echo "pm2 is already installed."
 else
@@ -102,7 +102,7 @@ else
     fi
 fi
 
-# yarn Check
+
 if command -v yarn &> /dev/null; then
     echo "yarn is already installed."
 else
@@ -118,58 +118,58 @@ fi
 
 source ~/.bashrc
 
-path_api=$base_path/api
-path_client=$base_path/client
+# Set up API environment
+API_PATH=$BASE_PATH/api
+CLIENT_PATH=$BASE_PATH/client
+PREVIEW_SECRET=$(openssl rand -base64 16)
 
-cd $path_api
-
-#load Libs
+cd $API_PATH
 yarn
 
-#check .env file API 
-if [ ! -f "${path_api}/.env" ]; then
-    echo "Create .env"
-    touch  "${path_api}/.env"
+# Set up API .env file
+if [ ! -f ".env" ]; then
+    echo "Creating .env for API"
+    touch  ".env"
 else
-    echo ".env file alredy exists."
+    echo ".env file for API already exists."
 fi
 
-# Set .env API
-check_and_add_to_env "HOST" "0.0.0.0" "${path_api}/.env"
+
+check_and_add_to_env "HOST" "0.0.0.0" ".env"
 check_and_add_to_env "PORT" "1337" ".env"
-check_and_add_to_env "STRAPI_ADMIN_CLIENT_URL" "http://${publicIPv4}:3000" "${path_api}/.env"
-check_and_add_to_env "STRAPI_ADMIN_CLIENT_PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" "${path_api}/.env"
-check_and_add_to_env "JWT_SECRET" "$(openssl rand -base64 16)" "${path_api}/.env"
-check_and_add_to_env "NODE_ENV" "production" "${path_api}/.env"
+check_and_add_to_env "STRAPI_ADMIN_CLIENT_URL" "http://${PUBLIC_IPV4}:3000" ".env"
+check_and_add_to_env "STRAPI_ADMIN_CLIENT_PREVIEW_SECRET" "${PREVIEW_SECRET}" ".env"
+check_and_add_to_env "JWT_SECRET" "$(openssl rand -base64 16)" ".env"
+check_and_add_to_env "NODE_ENV" "production" ".env"
 
 yarn seed
 
 echo "Starting Strapi..."
 pm2 start yarn --name Strapi_Api -- start
 
-cd $path_client
+# Set up Client environment
+cd $CLIENT_PATH
 
-#check .env file NextJs
-if [ ! -f "${path_api}/.env" ]; then
-    echo "Create .env"
-    touch  "${path_client}/.env"
+
+if [ ! -f ".env" ]; then
+    echo "Creating .env for Client"
+    touch  ".env"
 else
-    echo ".env file alredy exists."
+    echo ".env file for Client already exists."
 fi
 
-#load Libs
+
 yarn
 
-# Set .env NextJS
-check_and_add_to_env "NEXT_PUBLIC_API_URL" "http://${publicIPv4}:1337" ".env"
-check_and_add_to_env "PREVIEW_SECRET" "ARNFCb9zrC9ZHm5hZzCigWivD40icS4s" ".env"
 
-echo "Build NextJS..."
+check_and_add_to_env "NEXT_PUBLIC_API_URL" "http://${PUBLIC_IPV4}:1337" ".env"
+check_and_add_to_env "PREVIEW_SECRET" "${PREVIEW_SECRET}" ".env"
+
+echo "Building Next.js..."
 yarn build
 echo "Starting Client..."
 pm2 start yarn --name client -- start
 
-echo "Deploy Success"
-
-echo "You Can Access Web-Application at http://${publicIPv4}:3000"
-echo "You Can Access Strapi-Backend at http://${publicIPv4}:1337"
+echo "Deployment successful"
+echo "You Can Access Web-Application at http://${PUBLIC_IPV4}:3000"
+echo "You Can Access Strapi-Backend at http://${PUBLIC_IPV4}:1337"
