@@ -73,7 +73,7 @@ const Register = ({ Register }) => {
             Back
           </a>
         </Link>
-        <h1 className="text-3xl font-bold text-center mb-6">Register</h1>
+        <h1 className="text-3xl font-bold text-center mb-6">Sign up</h1>
         <form onSubmit={handleRegister}>
           <input
             type="text"
